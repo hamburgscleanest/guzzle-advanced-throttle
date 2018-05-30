@@ -89,7 +89,7 @@ class RequestLimitRuleset
                 class_exists($klass);
             }
 
-            $validStrategies = array_filter(get_declared_classes(), function ($className) {
+            $validStrategies = array_filter(get_declared_classes(), function($className) {
                     return in_array(StorageInterface::class, class_implements($className));
                 }
             );
@@ -123,7 +123,7 @@ class RequestLimitRuleset
                 class_exists($klass);
             }
 
-            $validStrategies = array_filter(get_declared_classes(), function ($className) {
+            $validStrategies = array_filter(get_declared_classes(), function($className) {
                 return in_array(CacheStrategy::class, class_implements($className));
             });
             throw new UnknownCacheStrategyException($cacheStrategyClassName, $validStrategies);

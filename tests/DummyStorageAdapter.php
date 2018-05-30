@@ -54,7 +54,6 @@ class DummyStorageAdapter implements StorageInterface
      */
     public function saveResponse(RequestInterface $request, ResponseInterface $response): void
     {
-        return null;
     }
 
     /**
