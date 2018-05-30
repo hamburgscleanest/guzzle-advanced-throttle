@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
  * Class ForceCache
  * @package hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies
  */
-class ForceCache extends Cachable
+class ForceCache extends Cacheable
 {
 
     /**

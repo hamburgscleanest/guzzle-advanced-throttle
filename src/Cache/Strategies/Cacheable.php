@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class Cache
  * @package hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies
  */
-class Cachable implements CacheStrategy
+class Cacheable implements CacheStrategy
 {
 
     /** @var StorageInterface */

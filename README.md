@@ -281,7 +281,7 @@ $rules = new RequestLimitRuleset(
 > Available in version 2.0.5 and higher
 
 Your custom caching strategy must implement `CacheStrategy`.
-It is suggested you use `Cachable` (not there's no 'e') for a parent class.
+It is suggested you use `Cacheable` for a parent class.
 This will give a good head start, see `ForceCache` and `Cache` for ideas.
 
 To use your custom caching strategy, you'll need to pass the fully qualified cache name to `RequestLimitRuleset`.

@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
  * Class Cache
  * @package hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies
  */
-class Cache extends Cachable
+class Cache extends Cacheable
 {
 
     /**
