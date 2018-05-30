@@ -82,18 +82,12 @@ class RequestLimitRuleset
 
         if (!$this->_implementsInterface(StorageInterface::class, $adapterClassName))
         {
-            // Make sure we have the default classes in the array for the exception
-            // This is an ugly way to do this...
-            foreach (self::STORAGE_MAP as $key => $klass)
-            {
-                \class_exists($klass);
-            }
-
             $validStrategies = \array_filter(get_declared_classes(), function($className) {
                     return $this->_implementsInterface(StorageInterface::class, $className);
                 }
             );
-            throw new UnknownStorageAdapterException($adapterClassName, $validStrategies);
+            throw new UnknownStorageAdapterException($adapterClassName,
+                $validStrategies + \array_values(self::STORAGE_MAP));
         }
 
         $this->_storage = new $adapterClassName($this->_config);
@@ -116,17 +110,12 @@ class RequestLimitRuleset
 
         if (!$this->_implementsInterface(CacheStrategy::class, $cacheStrategyClassName))
         {
-            // Make sure we have the default classes in the array for the exception
-            // This is an ugly way to do this...
-            foreach (self::CACHE_STRATEGIES as $key => $klass)
-            {
-                \class_exists($klass);
-            }
-
             $validStrategies = \array_filter(get_declared_classes(), function($className) {
                 return $this->_implementsInterface(CacheStrategy::class, $className);
             });
-            throw new UnknownCacheStrategyException($cacheStrategyClassName, $validStrategies);
+
+            throw new UnknownCacheStrategyException($cacheStrategyClassName,
+                $validStrategies + \array_values(self::CACHE_STRATEGIES));
         }
 
         $this->_cacheStrategy = new $cacheStrategyClassName($this->_storage);
