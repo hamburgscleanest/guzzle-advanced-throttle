@@ -66,6 +66,7 @@ class RequestLimitRuleset
     }
 
     /**
+     * Sets internal storage adapter for this rule set.
      * @param string $adapterName
      * @throws \hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\UnknownStorageAdapterException
      */
@@ -94,6 +95,7 @@ class RequestLimitRuleset
     }
 
     /**
+     * Sets the caching strategy for this rule set.
      * @param string $cacheStrategy
      * @throws \hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\UnknownCacheStrategyException
      */
