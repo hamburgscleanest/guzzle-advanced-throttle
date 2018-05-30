@@ -80,17 +80,17 @@ class RequestLimitRuleset
             $adapterClassName = self::STORAGE_MAP[$adapterName];
         }
 
-        if (!in_array(StorageInterface::class, class_implements($adapterClassName)))
+        if (!$this->_implementsInterface(StorageInterface::class, $adapterClassName))
         {
             // Make sure we have the default classes in the array for the exception
             // This is an ugly way to do this...
             foreach (self::STORAGE_MAP as $key => $klass)
             {
-                class_exists($klass);
+                \class_exists($klass);
             }
 
-            $validStrategies = array_filter(get_declared_classes(), function($className) {
-                    return in_array(StorageInterface::class, class_implements($className));
+            $validStrategies = \array_filter(get_declared_classes(), function($className) {
+                    return $this->_implementsInterface(StorageInterface::class, $className);
                 }
             );
             throw new UnknownStorageAdapterException($adapterClassName, $validStrategies);
@@ -114,22 +114,32 @@ class RequestLimitRuleset
             $cacheStrategyClassName = self::CACHE_STRATEGIES[$cacheStrategy];
         }
 
-        if (!in_array(CacheStrategy::class, class_implements($cacheStrategyClassName)))
+        if (!$this->_implementsInterface(CacheStrategy::class, $cacheStrategyClassName))
         {
             // Make sure we have the default classes in the array for the exception
             // This is an ugly way to do this...
             foreach (self::CACHE_STRATEGIES as $key => $klass)
             {
-                class_exists($klass);
+                \class_exists($klass);
             }
 
-            $validStrategies = array_filter(get_declared_classes(), function($className) {
-                return in_array(CacheStrategy::class, class_implements($className));
+            $validStrategies = \array_filter(get_declared_classes(), function($className) {
+                return $this->_implementsInterface(CacheStrategy::class, $className);
             });
             throw new UnknownCacheStrategyException($cacheStrategyClassName, $validStrategies);
         }
 
         $this->_cacheStrategy = new $cacheStrategyClassName($this->_storage);
+    }
+
+    /**
+     * Returns true|false if the $implementerClassName implements interface $interfaceName
+     * @param string $implementerClassName class name of the implementation class to test
+     * @param string $interfaceName name of the interface that should be implemented
+     * @return bool TRUE if the $implementerClassName implements $interfaceName, FALSE otherwise
+     */
+    private function _implementsInterface(string $implementerClassName, string $interfaceName) : bool {
+        return \in_array($interfaceName, \class_implements($implementerClassName), TRUE);
     }
 
     /**
