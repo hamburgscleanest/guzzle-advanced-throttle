@@ -81,10 +81,10 @@ class RequestLimitRuleset
             $adapterClassName = self::STORAGE_MAP[$adapterName];
         }
 
-        if (!$this->_implementsInterface(StorageInterface::class, $adapterClassName))
+        if (!$this->_implementsInterface($adapterClassName, StorageInterface::class))
         {
             $validStrategies = \array_filter(get_declared_classes(), function($className) {
-                    return $this->_implementsInterface(StorageInterface::class, $className);
+                    return $this->_implementsInterface($className, StorageInterface::class);
                 }
             );
             throw new UnknownStorageAdapterException($adapterClassName,
@@ -110,10 +110,10 @@ class RequestLimitRuleset
             $cacheStrategyClassName = self::CACHE_STRATEGIES[$cacheStrategy];
         }
 
-        if (!$this->_implementsInterface(CacheStrategy::class, $cacheStrategyClassName))
+        if (!$this->_implementsInterface($cacheStrategyClassName, CacheStrategy::class))
         {
             $validStrategies = \array_filter(get_declared_classes(), function($className) {
-                return $this->_implementsInterface(CacheStrategy::class, $className);
+                return $this->_implementsInterface($className, CacheStrategy::class);
             });
 
             throw new UnknownCacheStrategyException($cacheStrategyClassName,
