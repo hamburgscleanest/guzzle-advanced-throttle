@@ -71,13 +71,32 @@ class RequestLimitRuleset
      */
     private function _setStorageAdapter(string $adapterName) : void
     {
-        if (!isset(self::STORAGE_MAP[$adapterName]))
+        // Storing this so we can potentially change it later
+        $adapterClassName = $adapterName;
+
+        // Set the actual class name from the map
+        if (isset(self::STORAGE_MAP[$adapterName]))
         {
-            throw new UnknownStorageAdapterException($adapterName, self::STORAGE_MAP);
+            $adapterClassName = self::STORAGE_MAP[$adapterName];
         }
 
-        $storageAdapterClass = self::STORAGE_MAP[$adapterName];
-        $this->_storage = new $storageAdapterClass($this->_config);
+        if (!in_array(StorageInterface::class, class_implements($adapterClassName)))
+        {
+            // Make sure we have the default classes in the array for the exception
+            // This is an ugly way to do this...
+            foreach (self::STORAGE_MAP as $key => $klass)
+            {
+                class_exists($klass);
+            }
+
+            $validStrategies = array_filter(get_declared_classes(), function ($className) {
+                    return in_array(StorageInterface::class, class_implements($className));
+                }
+            );
+            throw new UnknownStorageAdapterException($adapterClassName, $validStrategies);
+        }
+
+        $this->_storage = new $adapterClassName($this->_config);
     }
 
     /**
@@ -86,13 +105,31 @@ class RequestLimitRuleset
      */
     private function _setCacheStrategy(string $cacheStrategy) : void
     {
-        if (!isset(self::CACHE_STRATEGIES[$cacheStrategy]))
+        // Storing this so we can potentially change it later
+        $cacheStrategyClassName = $cacheStrategy;
+
+        // Set the actual class name from the map
+        if (isset(self::CACHE_STRATEGIES[$cacheStrategy]))
         {
-            throw new UnknownCacheStrategyException($cacheStrategy, self::CACHE_STRATEGIES);
+            $cacheStrategyClassName = self::CACHE_STRATEGIES[$cacheStrategy];
         }
 
-        $cacheStrategyClass = self::CACHE_STRATEGIES[$cacheStrategy];
-        $this->_cacheStrategy = new $cacheStrategyClass($this->_storage);
+        if (!in_array(CacheStrategy::class, class_implements($cacheStrategyClassName)))
+        {
+            // Make sure we have the default classes in the array for the exception
+            // This is an ugly way to do this...
+            foreach (self::CACHE_STRATEGIES as $key => $klass)
+            {
+                class_exists($klass);
+            }
+
+            $validStrategies = array_filter(get_declared_classes(), function ($className) {
+                return in_array(CacheStrategy::class, class_implements($className));
+            });
+            throw new UnknownCacheStrategyException($cacheStrategyClassName, $validStrategies);
+        }
+
+        $this->_cacheStrategy = new $cacheStrategyClassName($this->_storage);
     }
 
     /**

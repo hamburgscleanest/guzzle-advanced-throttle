@@ -3,10 +3,18 @@
 namespace hamburgscleanest\GuzzleAdvancedThrottle\Tests;
 
 use GuzzleHttp\Psr7\Request;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Adapters\ArrayAdapter;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Adapters\LaravelAdapter;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Drivers\RedisDriver;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies\Cache;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies\ForceCache;
+use hamburgscleanest\GuzzleAdvancedThrottle\Cache\Strategies\NoCache;
 use hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\HostNotDefinedException;
+use hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\LaravelCacheConfigNotSetException;
 use hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\UnknownCacheStrategyException;
 use hamburgscleanest\GuzzleAdvancedThrottle\Exceptions\UnknownStorageAdapterException;
 use hamburgscleanest\GuzzleAdvancedThrottle\RequestLimitRuleset;
+use hamburgscleanest\GuzzleAdvancedThrottle\TimeKeeper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,16 +36,81 @@ class RequestLimitRulesetTest extends TestCase
     public function throws_unknown_cache_strategy_exception() : void
     {
         $this->expectException(UnknownCacheStrategyException::class);
-
-        RequestLimitRuleset::create([], 'garbage');
+        RequestLimitRuleset::create([], TimeKeeper::class);
     }
 
     /** @test */
-    public function throws_unknown_storage_adapter_exception() : void
+    public function verify_exception_message_for_unknown_cache_strategy_exception() : void
+    {
+        try
+        {
+            RequestLimitRuleset::create([], TimeKeeper::class);
+            $this->fail("Should have thrown " . UnknownCacheStrategyException::class);
+        }
+        catch (UnknownCacheStrategyException $e)
+        {
+            // PHPUnit doesn't have a good way to make sure an exception message contains parts of strings,
+            // and I'm not creating a RegExp for this
+            $msg = $e->getMessage();
+            $this->assertThat($msg, self::stringContains((string) TimeKeeper::class));
+            $this->assertThat($msg, self::stringContains((string) NoCache::class));
+            $this->assertThat($msg, self::stringContains((string) Cache::class));
+            $this->assertThat($msg, self::stringContains((string) ForceCache::class));
+        }
+    }
+
+    /** @test */
+    public function no_exception_on_custom_cache_strategy() : void
+    {
+        $this->assertInstanceOf(RequestLimitRuleset::class,
+            RequestLimitRuleset::create([], DummyCacheStrategy::class));
+    }
+
+    /** @test */
+    public function throws_unknown_storage_adapter_exception_on_invalid_adapter() : void
     {
         $this->expectException(UnknownStorageAdapterException::class);
 
-        RequestLimitRuleset::create([], 'no-cache', 'garbage');
+        RequestLimitRuleset::create([], 'no-cache', RedisDriver::class);
+    }
+
+    /** @test */
+    public function no_exception_on_valid_adapter() : void
+    {
+        $this->assertInstanceOf(RequestLimitRuleset::class,
+            RequestLimitRuleset::create([], 'no-cache', ArrayAdapter::class));
+    }
+
+    /** @test */
+    public function no_unknown_storage_adapter_exception_on_old_laravel_adapter_usage() : void
+    {
+        $this->expectException(LaravelCacheConfigNotSetException::class);
+        RequestLimitRuleset::create([], 'no-cache', 'laravel');
+    }
+
+    /** @test */
+    public function throws_unknown_storage_adapter_exception_on_unknown_adapter_usage() : void
+    {
+        try
+        {
+            RequestLimitRuleset::create([], 'no-cache', TimeKeeper::class);
+            $this->fail('Should have thrown an exception');
+        }
+        catch (UnknownStorageAdapterException $e)
+        {
+            // PHPUnit doesn't have a good way to make sure an exception message contains parts of strings,
+            // and I'm not creating a RegExp for this
+            $msg = $e->getMessage();
+            $this->assertThat($msg, self::stringContains((string) ArrayAdapter::class));
+            $this->assertThat($msg, self::stringContains((string) LaravelAdapter::class));
+        }
+    }
+
+    /** @test */
+    public function no_unknown_storage_adapter_exception_on_custom_adapter_usage() : void
+    {
+        $this->assertInstanceOf(RequestLimitRuleset::class,
+            RequestLimitRuleset::create([], 'no-cache', DummyStorageAdapter::class));
     }
 
     /** @test
