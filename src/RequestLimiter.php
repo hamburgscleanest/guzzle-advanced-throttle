@@ -106,7 +106,7 @@ class RequestLimiter
             return true;
         }
 
-        if ($this->_requestCount >= $this->_maxRequestCount)
+        if ($this->getCurrentRequestCount() >= $this->_maxRequestCount)
         {
             return false;
         }
