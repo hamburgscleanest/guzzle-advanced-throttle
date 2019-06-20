@@ -396,7 +396,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.8.22",
+            "version": "v5.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -552,16 +552,16 @@
         },
         {
             "name": "illuminate/redis",
-            "version": "v5.8.22",
+            "version": "v5.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/redis.git",
-                "reference": "a5feebbee5a90006cddfed44e77aa41dc59fe941"
+                "reference": "b1f0740e47947e905b29fb3b6c80fc0d821d5dac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/redis/zipball/a5feebbee5a90006cddfed44e77aa41dc59fe941",
-                "reference": "a5feebbee5a90006cddfed44e77aa41dc59fe941",
+                "url": "https://api.github.com/repos/illuminate/redis/zipball/b1f0740e47947e905b29fb3b6c80fc0d821d5dac",
+                "reference": "b1f0740e47947e905b29fb3b6c80fc0d821d5dac",
                 "shasum": ""
             },
             "require": {
@@ -593,20 +593,20 @@
             ],
             "description": "The Illuminate Redis package.",
             "homepage": "https://laravel.com",
-            "time": "2019-06-04T22:03:18+00:00"
+            "time": "2019-06-13T10:24:39+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.8.22",
+            "version": "v5.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "0c3ef774fdfcb38dce7dc52967107423e86224c5"
+                "reference": "b05653f5ecce996734d3facd06a81aff504b6a2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/0c3ef774fdfcb38dce7dc52967107423e86224c5",
-                "reference": "0c3ef774fdfcb38dce7dc52967107423e86224c5",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/b05653f5ecce996734d3facd06a81aff504b6a2f",
+                "reference": "b05653f5ecce996734d3facd06a81aff504b6a2f",
                 "shasum": ""
             },
             "require": {
@@ -654,7 +654,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2019-06-12T08:34:45+00:00"
+            "time": "2019-06-19T14:12:17+00:00"
         },
         {
             "name": "nesbot/carbon",
