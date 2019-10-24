@@ -29,7 +29,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "guzzlehttp/guzzle": "~6.3.0",
+        "guzzlehttp/guzzle": "~6.3.0 || ~6.4.0",
         "illuminate/cache": "^5.8.2|^6.0.0",
         "illuminate/container": "^5.8.2|^6.0.0",
         "illuminate/config": "^5.8.2|^6.0.0",
