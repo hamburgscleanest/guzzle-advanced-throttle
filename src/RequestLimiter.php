@@ -46,7 +46,7 @@ class RequestLimiter
         $this->_maxRequestCount = $maxRequests ?? self::DEFAULT_MAX_REQUESTS;
         $requestInterval = $requestIntervalSeconds ?? self::DEFAULT_REQUEST_INTERVAL;
 
-        $this->_storageKey = $maxRequests . '_' . $requestInterval;
+        $this->_storageKey = $this->_maxRequestCount  . '_' . $requestInterval;
         $this->_restoreState($requestInterval);
     }
 
@@ -148,7 +148,7 @@ class RequestLimiter
         $scheme = $uri->getScheme();
         if (!empty($host) && !empty($scheme))
         {
-            $host = $scheme . '://' . $host;
+            $host = $scheme . '://' . $host.$uri->getPath();
         } else
         {
             $host = $uri->getPath();
