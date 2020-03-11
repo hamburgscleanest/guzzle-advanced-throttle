@@ -135,20 +135,21 @@ class RequestLimiter
     {
         $uri = $options['base_uri'] ?? $request->getUri();
 
-        return $this->_buildHostUrl($uri);
+        return $this->_buildHostUrl($uri, $options);
     }
 
     /**
      * @param Uri $uri
+     * @param array $options
      * @return string
      */
-    private function _buildHostUrl(Uri $uri) : string
+    private function _buildHostUrl(Uri $uri, array $options = []) : string
     {
         $host = $uri->getHost();
         $scheme = $uri->getScheme();
         if (!empty($host) && !empty($scheme))
         {
-            $host = $scheme . '://' . $host.$uri->getPath();
+            $host = $scheme . '://' . $host . (isset($options['base_uri']) ? $uri->getPath() : '');
         } else
         {
             $host = $uri->getPath();
