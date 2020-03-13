@@ -96,10 +96,11 @@ class RequestLimiter
     /**
      * @param RequestInterface $request
      * @param array $options
+     * @param bool $isChangeStatement
      * @return bool
      * @throws \Exception
      */
-    public function canRequest(RequestInterface $request, array $options = []) : bool
+    public function canRequest(RequestInterface $request, array $options = [], $isChangeStatement = true) : bool
     {
         if (!$this->matches($this->_getHostFromRequestAndOptions($request, $options)))
         {
@@ -111,8 +112,11 @@ class RequestLimiter
             return false;
         }
 
-        $this->_increment();
-        $this->_save();
+        if ($isChangeStatement)
+        {
+            $this->_increment();
+            $this->_save();
+        }
 
         return true;
     }

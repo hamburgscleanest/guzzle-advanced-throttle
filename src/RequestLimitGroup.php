@@ -61,14 +61,30 @@ class RequestLimitGroup
             /** @var RequestLimiter $requestLimiter */
             $requestLimiter = $this->_requestLimiters->current();
 
-            $canRequest = $requestLimiter->canRequest($request, $options);
+            $canRequest = $requestLimiter->canRequest($request, $options, false);
             if ($groupCanRequest && !$canRequest)
             {
                 $groupCanRequest = false;
+                $requestLimiter->canRequest($request, $options, true);
                 $this->_retryAfter = $requestLimiter->getRemainingSeconds();
+                break;
             }
 
             $this->_requestLimiters->next();
+        }
+
+        if ($groupCanRequest)
+        {
+            $this->_requestLimiters->rewind();
+            while ($this->_requestLimiters->valid())
+            {
+                /** @var RequestLimiter $requestLimiter */
+                $requestLimiter = $this->_requestLimiters->current();
+
+                $requestLimiter->canRequest($request, $options, true);
+                $this->_requestLimiters->next();
+            }
+
         }
 
         return $groupCanRequest;
