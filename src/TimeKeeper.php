@@ -7,7 +7,7 @@ use DateTimeImmutable;
 class TimeKeeper
 {
     private int $_expirationIntervalSeconds;
-    private DateTimeImmutable|null $_expiresAt = null;
+    private DateTimeImmutable | null $_expiresAt = null;
 
     public function __construct(int $intervalInSeconds)
     {

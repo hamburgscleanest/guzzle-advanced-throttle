@@ -10,12 +10,12 @@ class SystemClock
 
     private DateTimeImmutable $_now;
 
-    public function __construct(DateTimeImmutable|null $now = null)
+    public function __construct(DateTimeImmutable | null $now = null)
     {
         $this->_now = $now ?? new DateTimeImmutable();
     }
 
-    public static function create(DateTimeImmutable|null $now = null): self
+    public static function create(DateTimeImmutable | null $now = null): self
     {
         return new self($now);
     }

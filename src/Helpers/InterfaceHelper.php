@@ -9,7 +9,7 @@ class InterfaceHelper
      */
     public static function getImplementations(string $interfaceName): array
     {
-        return \array_filter(\get_declared_classes(), function ($className) use ($interfaceName) {
+        return \array_filter(\get_declared_classes(), function($className) use ($interfaceName) {
             return self::implementsInterface($className, $interfaceName);
         });
     }

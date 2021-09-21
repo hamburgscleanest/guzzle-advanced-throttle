@@ -11,9 +11,12 @@ class Cache extends Cacheable
 {
     public function request(RequestInterface $request, callable $handler): PromiseInterface
     {
-        try {
+        try
+        {
             return parent::request($request, $handler);
-        } catch (TooManyRequestsHttpException $tooManyRequestsHttpException) {
+        }
+        catch (TooManyRequestsHttpException $tooManyRequestsHttpException)
+        {
             $response = $this->_getResponse($request);
             if ($response !== null) {
                 return new FulfilledPromise($response);

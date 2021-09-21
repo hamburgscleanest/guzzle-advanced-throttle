@@ -20,7 +20,7 @@ abstract class Cacheable implements CacheStrategy
 
     public function request(RequestInterface $request, callable $handler): PromiseInterface
     {
-        return $handler()->then(function (ResponseInterface $response) use ($request) {
+        return $handler()->then(function(ResponseInterface $response) use ($request) {
             $this->_saveResponse($request, $response);
 
             return $response;

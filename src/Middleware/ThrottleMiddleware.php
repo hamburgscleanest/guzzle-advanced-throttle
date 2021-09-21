@@ -22,8 +22,8 @@ class ThrottleMiddleware
 
     public function handle(): callable
     {
-        return function (callable $handler): callable {
-            return function (RequestInterface $request, array $options) use ($handler) {
+        return function(callable $handler): callable {
+            return function(RequestInterface $request, array $options) use ($handler) {
                 return $this->_requestLimitRuleset->cache($request, $this->_requestHandler($handler, $request, $options));
             };
         };
@@ -31,7 +31,7 @@ class ThrottleMiddleware
 
     private function _requestHandler(callable $handler, RequestInterface $request, array $options): callable
     {
-        return function () use ($handler, $request, $options) {
+        return function() use ($handler, $request, $options) {
             $requestLimitGroup = $this->_requestLimitRuleset->getRequestLimitGroup();
             if (!$requestLimitGroup->canRequest($request, $options)) {
                 throw new TooManyRequestsHttpException(
